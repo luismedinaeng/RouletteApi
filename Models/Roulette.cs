@@ -14,7 +14,7 @@ namespace RouletteApi.Models
             this.Status = Constants.CLOSE;
             this.Result = Constants.WITHOUT_RESULT;
         }
-        public bool addBet(Bet newBet)
+        public bool AddBet(Bet newBet)
         {
             if (string.Compare(this.Status, Constants.OPEN) == 0)
             {
@@ -24,6 +24,13 @@ namespace RouletteApi.Models
             else
                 return false;
         }
-
+        public void Open()
+        {
+            if (this.Status == Constants.CLOSE)
+            {
+                this.Result = Constants.WITHOUT_RESULT;
+                this.Status = Constants.OPEN;
+            }
+        }
     }
 }
