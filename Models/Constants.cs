@@ -10,6 +10,9 @@ namespace RouletteApi.Models
         public const int WAITING = 0;
         public const int WIN = 1;
         public const int LOSE = 2;
+        public const string OPEN = "open";
+        public const string CLOSE = "close";
 
+        public const int WITHOUT_RESULT = -1;
     }
 }
