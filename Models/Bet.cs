@@ -11,7 +11,7 @@ namespace RouletteApi.Models
         public string UserId { get; set; }
         public long RouletteId { get; set; }
         
-        public Bet(int token, long value, string userId, long rouletteId)
+        public Bet(int token, long value)
         {
             if ((token == Constants.BLACK_TOKEN || token == Constants.RED_TOKEN) || (token >= Constants.MIN_TOKEN && token <= Constants.MAX_TOKEN))
                 this.Token = token;
@@ -21,8 +21,6 @@ namespace RouletteApi.Models
                 this.Value = value;
             else
                 throw new ArgumentOutOfRangeException("value");
-            this.UserId = userId;
-            this.RouletteId = rouletteId;
         }
 
         public void updateStatus(int resultNumber, int resultColor)
