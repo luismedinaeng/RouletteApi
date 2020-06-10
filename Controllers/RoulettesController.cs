@@ -47,18 +47,40 @@ namespace RouletteApi.Controllers
             } 
         }
 
+        [HttpPost("{id}/Bets")]
+        public async Task<ActionResult<Roulette>> AddBetToRoulette(long id, BetDTO bet)
+        {
+            var roulette = await _context.Roulettes.FindAsync(id);
+            if (roulette == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Bet newBet = new Bet(bet.Token, bet.Value);
+                if (roulette.AddBet(newBet))
+                {
+                    _context.Update(roulette);
+                    await _context.SaveChangesAsync();
+                    return Ok(new { Status = "Added", bets = roulette.Bets.Count});
+                }
+                else
+                {
+                    return Conflict(new { Status = "Roulette closed"});
+                }
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Roulette>>> GetRoulletes()
         {
-            
-            return await _context.Roulettes.ToListAsync();
+            return await _context.Roulettes.Include(rt => rt.Bets).ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Roulette>> GetRoulette(long id)
         {
-            var roulette = await _context.Roulettes.FindAsync(id);
-
+            var roulette = await _context.Roulettes.Include(rt => rt.Bets).FirstAsync(rt => id == rt.Id);
             if (roulette == null)
             {
                 return NotFound();
