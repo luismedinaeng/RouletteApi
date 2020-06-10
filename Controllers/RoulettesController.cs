@@ -41,6 +41,8 @@ namespace RouletteApi.Controllers
             else
             {
                 roulette.Open();
+                _context.Entry(roulette).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return Ok(new { Status = "Ok"});
             } 
         }
