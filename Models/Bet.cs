@@ -21,6 +21,8 @@ namespace RouletteApi.Models
                 this.Value = value;
             else
                 throw new ArgumentOutOfRangeException("value");
+            
+            this.Status = Constants.WAITING;
         }
 
         public void updateStatus(int resultNumber, int resultColor)
