@@ -40,14 +40,19 @@ namespace RouletteApi.Controllers
             }
             else
             {
-                roulette.Open();
-                _context.Entry(roulette).State = EntityState.Modified;
+                if (roulette.Open())
+                {
+                    _context.Entry(roulette).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return Ok(new { Status = "Ok"});
+                return Ok(new { status = "Opened"});
+                }
+                else
+                    return Conflict(new { status = "Roulete already opened"});
+                
             } 
         }
 
-        [HttpPost("{id}/Bets")]
+        [HttpPost("{id}/bets")]
         public async Task<ActionResult<Roulette>> AddBetToRoulette(long id, BetDTO bet)
         {
             var roulette = await _context.Roulettes.FindAsync(id);
@@ -66,7 +71,7 @@ namespace RouletteApi.Controllers
                 }
                 else
                 {
-                    return Conflict(new { Status = "Roulette closed"});
+                    return Conflict(new { status = "Roulette closed" });
                 }
             }
         }
