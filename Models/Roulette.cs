@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace RouletteApi.Models
@@ -26,13 +27,42 @@ namespace RouletteApi.Models
             else
                 return false;
         }
-        public void Open()
+        public void CleanBets()
+        {
+            this.Bets.Clear();
+        }
+
+        public void CloseBets()
+        {
+            foreach(Bet bet in this.Bets)
+            {
+                bet.updateStatus(this.Result, Constants.GetTokenColor(this.Result));
+            }
+        }
+        public bool Open()
         {
             if (this.Status == Constants.CLOSE)
             {
                 this.Result = Constants.WITHOUT_RESULT;
                 this.Status = Constants.OPEN;
+                return true;
             }
+            else
+                return false;
+        }
+        public bool Close()
+        {
+            if (this.Status == Constants.OPEN && Bets.Count > 0)
+            {
+                Random random = new Random();
+                this.Result = random.Next(Constants.MIN_TOKEN, Constants.MAX_TOKEN);
+                this.Status = Constants.CLOSE;
+                this.CloseBets();
+                return true;
+            }
+            else
+                return false;
+
         }
     }
 }
